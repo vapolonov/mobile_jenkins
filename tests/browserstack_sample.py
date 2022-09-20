@@ -8,7 +8,6 @@ from selene.support.shared import browser
 
 def test_search():
     with step('Type search request'):
-        # browser.open()
         browser.element((AppiumBy.ACCESSIBILITY_ID, "Search Wikipedia")).click()
         browser.element((AppiumBy.ID, "org.wikipedia.alpha:id/search_src_text")).send_keys("BrowserStack")
 

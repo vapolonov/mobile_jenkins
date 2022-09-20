@@ -31,7 +31,7 @@ def driver_management():
         }
     }
     browser.config.driver = webdriver.Remote(
-        command_executor=f"https://{user}:{key}@{url}/wd/hub",
+        command_executor=f"https://{user}:{key}@{url}",
         desired_capabilities=desired_capabilities
     )
     browser.config.timeout = 4
@@ -39,6 +39,6 @@ def driver_management():
     attach.add_html(browser)
     attach.add_screenshot(browser)
     attach.add_xml(browser)
-    attach.add_video(browser.driver.session_id)
+    attach.add_video(browser)
     browser.quit()
 

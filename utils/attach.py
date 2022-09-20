@@ -2,8 +2,6 @@
 import allure
 from allure_commons.types import AttachmentType
 
-from utils import browserstack
-
 
 def add_screenshot(browser):
     png = browser.driver.get_screenshot_as_png()
@@ -20,10 +18,9 @@ def add_xml(browser):
     allure.attach(html, 'page_source_xml', AttachmentType.XML)
 
 
-def add_video(session_id, *, name='video recording'):
-    video_url = browserstack.video_url(session_id=session_id)
-    html = ('<html><body>'
-            '<video width="100%" height="100%" controls autoplay>'
-            f'<source src="{video_url}" type="video/mp4">'
-            '</video></body></html>')
-    allure.attach(html, name=name, attachment_type=allure.attachment_type.HTML, extension='.html')
+def add_video(browser):
+    video_url = (f'https://app-automate.browserstack.com/s3-upload/bs-video-logs-euw/s3.eu-west-1/{browser.driver.session_id}/video-' + browser.driver.session_id + '.mp4')
+    html = (f'<html><body>'
+            f'<video width="100%" height="100%" controls autoplay><source src="{video_url}" type="video/mp4">'
+            f'</video></body></html>')
+    allure.attach(html, 'video_' + browser.driver.session_id, AttachmentType.HTML, '.html')

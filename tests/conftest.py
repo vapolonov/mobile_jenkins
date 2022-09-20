@@ -1,44 +1,40 @@
+"""
+Configuration test
+"""
 import os
-
 import pytest
 from dotenv import load_dotenv
-from selene.support.shared import browser
 from appium import webdriver
-
-from utils import attach
+from datetime import date
 
 
 @pytest.fixture(scope='session', autouse=True)
 def load_env():
+    """
+    Load .env
+    """
     load_dotenv()
 
 
-@pytest.fixture(scope='function', autouse=True)
-def driver_management():
-    user = os.getenv('user_name')
-    key = os.getenv('access_key')
-    url = os.getenv('remote_url')
+def create_driver(func) -> webdriver:
+    """
+    Create driver
+    """
+    USER = os.getenv('LOGIN')
+    KEY = os.getenv('KEY')
+    APPIUM_BROWSERSTACK = os.getenv('APPIUM_BROWSERSTACK')
 
-    desired_capabilities = {
+    desired_cap = {
         "app": "bs://c700ce60cf13ae8ed97705a55b8e022f13c5827c",
         "deviceName": "Google Pixel 3",
-        "platformVersion": "9.0",
+        "os_version": "9.0",
         "platformName": "android",
-        'bstack:options': {
-            "projectName": "First Python project",
-            "buildName": "browserstack-build-VASVAP",
-            "sessionName": "BStack first_test vasvap"
-        }
+        "project": "Python project",
+        "build": "browserstack-build-" + str(date.today()),
+        "name": func.__name__.capitalize().replace('_', ' ')
     }
-    browser.config.driver = webdriver.Remote(
-        command_executor=f"https://{user}:{key}@{url}",
-        desired_capabilities=desired_capabilities
-    )
-    browser.config.timeout = 4
-    yield driver_management
-    attach.add_html(browser)
-    attach.add_screenshot(browser)
-    attach.add_xml(browser)
-    attach.add_video(browser)
-    browser.quit()
 
+    return webdriver.Remote(
+        command_executor=f"http://{USER}:{KEY}@{APPIUM_BROWSERSTACK}/wd/hub",
+        desired_capabilities=desired_cap
+    )

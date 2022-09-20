@@ -1,5 +1,4 @@
 Appium-Python-Client==2.6.1
-selene==2.0.0-beta.10
+selene==2.0.b8
 pytest==7.1.3
 allure-pytest==2.10.0
-pydantic==1.10.2

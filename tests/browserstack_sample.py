@@ -5,6 +5,9 @@ from selene import have
 
 from selene.support.shared import browser
 
+from tests.conftest import create_driver
+from utils.attach import add_video
+
 
 def test_search():
     driver = create_driver(test_search)
